@@ -1,11 +1,11 @@
+# ZPool type
 module Puppet
   class Property
-
+    # VDev class
     class VDev < Property
-
       def flatten_and_sort(array)
         array = [array] unless array.is_a? Array
-        array.collect { |a| a.split(' ') }.flatten.sort
+        array.map { |a| a.split(' ') }.flatten.sort
       end
 
       def insync?(is)
@@ -15,6 +15,7 @@ module Puppet
       end
     end
 
+    # MultiVDev class
     class MultiVDev < VDev
       def insync?(is)
         return @should == [:absent] if is == :absent
@@ -23,7 +24,7 @@ module Puppet
 
         is.each_with_index { |list, i| return false unless flatten_and_sort(list) == flatten_and_sort(@should[i]) }
 
-        #if we made it this far we are in sync
+        # if we made it this far we are in sync
         true
       end
     end
@@ -36,11 +37,11 @@ module Puppet
 
     ensurable
 
-    newproperty(:disk, :array_matching => :all, :parent => Puppet::Property::VDev) do
-      desc "The disk(s) for this pool. Can be an array or a space separated string."
+    newproperty(:disk, array_matching: :all, parent: Puppet::Property::VDev) do
+      desc 'The disk(s) for this pool. Can be an array or a space separated string.'
     end
 
-    newproperty(:mirror, :array_matching => :all, :parent => Puppet::Property::MultiVDev) do
+    newproperty(:mirror, array_matching: :all, parent: Puppet::Property::MultiVDev) do
       desc "List of all the devices to mirror for this pool. Each mirror should be a
       space separated string:
 
@@ -49,11 +50,11 @@ module Puppet
       "
 
       validate do |value|
-        raise ArgumentError, _("mirror names must be provided as string separated, not a comma-separated list") if value.include?(",")
+        raise ArgumentError, _('mirror names must be provided as string separated, not a comma-separated list') if value.include?(',')
       end
     end
 
-    newproperty(:raidz, :array_matching => :all, :parent => Puppet::Property::MultiVDev) do
+    newproperty(:raidz, array_matching: :all, parent: Puppet::Property::MultiVDev) do
       desc "List of all the devices to raid for this pool. Should be an array of
       space separated strings:
 
@@ -62,30 +63,30 @@ module Puppet
       "
 
       validate do |value|
-        raise ArgumentError, _("raid names must be provided as string separated, not a comma-separated list") if value.include?(",")
+        raise ArgumentError, _('raid names must be provided as string separated, not a comma-separated list') if value.include?(',')
       end
     end
 
-    newproperty(:spare, :array_matching => :all, :parent => Puppet::Property::VDev) do
-      desc "Spare disk(s) for this pool."
+    newproperty(:spare, array_matching: :all, parent: Puppet::Property::VDev) do
+      desc 'Spare disk(s) for this pool.'
     end
 
-    newproperty(:log, :array_matching => :all, :parent => Puppet::Property::VDev) do
-      desc "Log disks for this pool. This type does not currently support mirroring of log disks."
+    newproperty(:log, array_matching: :all, parent: Puppet::Property::VDev) do
+      desc 'Log disks for this pool. This type does not currently support mirroring of log disks.'
     end
 
     newparam(:pool) do
-      desc "The name for this pool."
+      desc 'The name for this pool.'
       isnamevar
     end
 
     newparam(:raid_parity) do
-      desc "Determines parity when using the `raidz` parameter."
+      desc 'Determines parity when using the `raidz` parameter.'
     end
 
     validate do
-      has_should = [:disk, :mirror, :raidz].select { |prop| self.should(prop) }
-      self.fail _("You cannot specify %{multiple_props} on this type (only one)") % { multiple_props: has_should.join(" and ") } if has_should.length > 1
+      has_should = [:disk, :mirror, :raidz].select { |prop| should(prop) }
+      raise _('You cannot specify %{multiple_props} on this type (only one)') % { multiple_props: has_should.join(' and ') } if has_should.length > 1
     end
   end
 end

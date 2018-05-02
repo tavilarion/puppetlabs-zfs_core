@@ -1,12 +1,12 @@
 Puppet::Type.type(:zfs).provide(:zfs) do
-  desc "Provider for zfs."
+  desc 'Provider for zfs.'
 
-  commands :zfs => 'zfs'
+  commands zfs: 'zfs'
 
   def self.instances
-    zfs(:list, '-H').split("\n").collect do |line|
-      name, _used, _avail, _refer, _mountpoint = line.split(/\s+/)
-      new({:name => name, :ensure => :present})
+    zfs(:list, '-H').split("\n").map do |line|
+      name, _used, _avail, _refer, _mountpoint = line.split(%r{\s+})
+      new(name: name, ensure: :present)
     end
   end
 
@@ -14,11 +14,11 @@ Puppet::Type.type(:zfs).provide(:zfs) do
     properties = []
     Puppet::Type.type(:zfs).validproperties.each do |property|
       next if property == :ensure
-      if value = @resource[property] and value != ""
+      if (value = @resource[property]) && value != ''
         if property == :volsize
-          properties << "-V" << "#{value}"
+          properties << '-V' << value.to_s
         else
-          properties << "-o" << "#{property}=#{value}"
+          properties << '-o' << "#{property}=#{value}"
         end
       end
     end
@@ -34,25 +34,23 @@ Puppet::Type.type(:zfs).provide(:zfs) do
   end
 
   def exists?
-    begin
-      zfs(:list, @resource[:name])
-      true
-    rescue Puppet::ExecutionFailure
-      false
-    end
+    zfs(:list, @resource[:name])
+    true
+  rescue Puppet::ExecutionFailure
+    false
   end
 
   # On FreeBSD zoned is called jailed
   def container_property
     case Facter.value(:operatingsystem)
-      when "FreeBSD"
-        :jailed
-      else
-        :zoned
+    when 'FreeBSD'
+      :jailed
+    else
+      :zoned
     end
   end
 
-  PARAMETER_UNSET_OR_NOT_AVAILABLE = '-'
+  PARAMETER_UNSET_OR_NOT_AVAILABLE = '-'.freeze
 
   # https://docs.oracle.com/cd/E19963-01/html/821-1448/gbscy.html
   # shareiscsi (added in build 120) was removed from S11 build 136
@@ -67,15 +65,16 @@ Puppet::Type.type(:zfs).provide(:zfs) do
     # best bet is to catch the exception and continue.
     define_method(field) do
       begin
-        zfs(:get, "-H", "-o", "value", field, @resource[:name]).strip
+        zfs(:get, '-H', '-o', 'value', field, @resource[:name]).strip
       rescue
         PARAMETER_UNSET_OR_NOT_AVAILABLE
       end
     end
-    define_method(field.to_s + "=") do |should|
+    define_method(field.to_s + '=') do |should|
       begin
         zfs(:set, "#{field}=#{should}", @resource[:name])
       rescue
+        PARAMETER_UNSET_OR_NOT_AVAILABLE
       end
     end
   end
@@ -87,22 +86,19 @@ Puppet::Type.type(:zfs).provide(:zfs) do
    :secondarycache, :setuid, :sharenfs, :sharesmb,
    :snapdir, :version, :volsize, :vscan, :xattr].each do |field|
     define_method(field) do
-      zfs(:get, "-H", "-o", "value", field, @resource[:name]).strip
+      zfs(:get, '-H', '-o', 'value', field, @resource[:name]).strip
     end
 
-    define_method(field.to_s + "=") do |should|
+    define_method(field.to_s + '=') do |should|
       zfs(:set, "#{field}=#{should}", @resource[:name])
     end
   end
 
-
   define_method(:zoned) do
-    zfs(:get, "-H", "-o", "value", container_property, @resource[:name]).strip
+    zfs(:get, '-H', '-o', 'value', container_property, @resource[:name]).strip
   end
 
-  define_method("zoned=") do |should|
+  define_method('zoned=') do |should|
     zfs(:set, "#{container_property}=#{should}", @resource[:name])
   end
-
 end
-
