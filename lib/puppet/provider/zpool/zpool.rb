@@ -48,6 +48,7 @@ Puppet::Type.type(:zpool).provide(:zpool) do
   end
 
   # rubocop:disable Style/AccessorMethodName
+  # rubocop:disable Style/NumericPredicate
   def get_pool_data
     # https://docs.oracle.com/cd/E19082-01/817-2271/gbcve/index.html
     # we could also use zpool iostat -v mypool for a (little bit) cleaner output
