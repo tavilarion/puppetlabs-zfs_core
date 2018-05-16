@@ -1,13 +1,18 @@
 # ZPool type
 module Puppet
+  # Puppet::Property
   class Property
     # VDev class
     class VDev < Property
+      # @param array the array to be flattened and sorted
+      # @return [Array] returns a flattened and sorted array
       def flatten_and_sort(array)
         array = [array] unless array.is_a? Array
         array.map { |a| a.split(' ') }.flatten.sort
       end
 
+      # @param is the current state of the object
+      # @return [Boolean] if the resource is in sync with what it should be
       def insync?(is)
         return @should == [:absent] if is == :absent
 
@@ -17,6 +22,8 @@ module Puppet
 
     # MultiVDev class
     class MultiVDev < VDev
+      # @param is the current state of the object
+      # @return [Boolean] if the resource is in sync with what it should be
       def insync?(is)
         return @should == [:absent] if is == :absent
 
@@ -31,9 +38,17 @@ module Puppet
   end
 
   Type.newtype(:zpool) do
-    @doc = "Manage zpools. Create and delete zpools. The provider WILL NOT SYNC, only report differences.
+    desc <<-DESC
+  Manage zpools. Create and delete zpools. The provider WILL NOT SYNC, only report differences.
 
-      Supports vdevs with mirrors, raidz, logs and spares."
+  Supports vdevs with mirrors, raidz, logs and spares.
+
+  @example Using zpool.
+    zpool { 'tstpool':
+      ensure => present,
+      disk => '/ztstpool/dsk',
+    }
+  DESC
 
     ensurable
 

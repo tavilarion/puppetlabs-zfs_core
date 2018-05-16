@@ -41,6 +41,7 @@ For details on usage, please see [the zfs puppet docs docs](https://puppet.com/d
 
 ## Reference
 
+Please see REFERENCE.md for the reference documentation.
 
 This module is documented using Puppet Strings.
 
