@@ -2,9 +2,11 @@
   "name": "puppetlabs-zfs_core",
   "version": "0.1.0",
   "author": "Puppet Labs",
-  "summary": "",
+  "summary": "Manage zfs. Create destroy and set properties on zfs instances.",
   "license": "Apache-2.0",
-  "source": "",
+  "source": "https://github.com/puppetlabs/puppetlabs-zfs_core",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-zfs_core/blob/master/README.md",
+  "issues_url": "https://tickets.puppetlabs.com/projects/MODULES",
   "dependencies": [
 
   ],
