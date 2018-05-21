@@ -33,3 +33,7 @@ spec/spec_helper.rb:
   default_configs:
     RSpec/InstanceVariable:
       Enabled: false
+
+.gitignore:
+  required:
+    - '.rspec'
