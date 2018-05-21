@@ -40,12 +40,12 @@ describe 'zpool' do
     end
 
     it 'is insync if the devices are the same and the should values are comma separated' do
-      vdev.should = %w[dev1 dev2]
+      vdev.should = ['dev1', 'dev2']
       expect(vdev).to be_safe_insync(['dev2 dev1'])
     end
 
     it 'is out of sync if the device is absent and should has a value' do
-      vdev.should = %w[dev1 dev2]
+      vdev.should = ['dev1', 'dev2']
       expect(vdev).not_to be_safe_insync(:absent)
     end
 
@@ -78,7 +78,7 @@ describe 'zpool' do
     end
 
     it 'is out of sync if the device is absent and should has a value' do
-      multi_vdev.should = %w[dev1 dev2]
+      multi_vdev.should = ['dev1', 'dev2']
       expect(multi_vdev).not_to be_safe_insync(:absent)
     end
 

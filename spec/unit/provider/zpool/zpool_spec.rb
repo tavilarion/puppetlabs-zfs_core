@@ -16,9 +16,9 @@ describe Puppet::Type.type(:zpool).provider(:zpool) do
 
   context '#current_pool' do
     it 'calls process_zpool_data with the result of get_pool_data only once' do
-      allow(provider).to receive(:get_pool_data).and_return(%w[foo disk])
-      allow(provider).to receive(:process_zpool_data).with(%w[foo disk]) { 'stuff' }
-      expect(provider).to receive(:process_zpool_data).with(%w[foo disk]).once
+      allow(provider).to receive(:get_pool_data).and_return(['foo', 'disk'])
+      allow(provider).to receive(:process_zpool_data).with(['foo', 'disk']) { 'stuff' }
+      expect(provider).to receive(:process_zpool_data).with(['foo', 'disk']).once
 
       provider.current_pool
       provider.current_pool
@@ -51,7 +51,7 @@ describe Puppet::Type.type(:zpool).provider(:zpool) do
   end
 
   context '#process_zpool_data' do
-    let(:zpool_data) { %w[foo disk] }
+    let(:zpool_data) { ['foo', 'disk'] }
 
     describe 'when there is no data' do
       it 'returns a hash with ensure=>:absent' do
@@ -61,35 +61,35 @@ describe Puppet::Type.type(:zpool).provider(:zpool) do
 
     describe 'when there is a spare' do
       it 'adds the spare disk to the hash' do
-        zpool_data.concat %w[spares spare_disk]
+        zpool_data.concat ['spares', 'spare_disk']
         expect(provider.process_zpool_data(zpool_data)[:spare]).to eq(['spare_disk'])
       end
     end
 
     describe 'when there are two spares' do
       it 'adds the spare disk to the hash as a single string' do
-        zpool_data.concat %w[spares spare_disk spare_disk2]
+        zpool_data.concat ['spares', 'spare_disk', 'spare_disk2']
         expect(provider.process_zpool_data(zpool_data)[:spare]).to eq(['spare_disk spare_disk2'])
       end
     end
 
     describe 'when there is a log' do
       it 'adds the log disk to the hash' do
-        zpool_data.concat %w[logs log_disk]
+        zpool_data.concat ['logs', 'log_disk']
         expect(provider.process_zpool_data(zpool_data)[:log]).to eq(['log_disk'])
       end
     end
 
     describe 'when there are two logs' do
       it 'adds the log disks to the hash as a single string' do
-        zpool_data.concat %w[spares spare_disk spare_disk2]
+        zpool_data.concat ['spares', 'spare_disk', 'spare_disk2']
         expect(provider.process_zpool_data(zpool_data)[:spare]).to eq(['spare_disk spare_disk2'])
       end
     end
 
     describe 'when the vdev is a single mirror' do
       it 'calls create_multi_array with mirror' do
-        zpool_data = %w[mirrorpool mirror disk1 disk2]
+        zpool_data = ['mirrorpool', 'mirror', 'disk1', 'disk2']
         expect(provider.process_zpool_data(zpool_data)[:mirror]).to eq(['disk1 disk2'])
       end
     end
@@ -103,7 +103,7 @@ describe Puppet::Type.type(:zpool).provider(:zpool) do
 
     describe 'when the vdev is a double mirror' do
       it 'calls create_multi_array with mirror' do
-        zpool_data = %w[mirrorpool mirror disk1 disk2 mirror disk3 disk4]
+        zpool_data = ['mirrorpool', 'mirror', 'disk1', 'disk2', 'mirror', 'disk3', 'disk4']
         expect(provider.process_zpool_data(zpool_data)[:mirror]).to eq(['disk1 disk2', 'disk3 disk4'])
       end
     end
@@ -117,7 +117,7 @@ describe Puppet::Type.type(:zpool).provider(:zpool) do
 
     describe 'when the vdev is a raidz1' do
       it 'calls create_multi_array with raidz1' do
-        zpool_data = %w[mirrorpool raidz1 disk1 disk2]
+        zpool_data = ['mirrorpool', 'raidz1', 'disk1', 'disk2']
         expect(provider.process_zpool_data(zpool_data)[:raidz]).to eq(['disk1 disk2'])
       end
     end
@@ -131,7 +131,7 @@ describe Puppet::Type.type(:zpool).provider(:zpool) do
 
     describe 'when the vdev is a raidz2' do
       it 'calls create_multi_array with raidz2 and set the raid_parity' do
-        zpool_data = %w[mirrorpool raidz2 disk1 disk2]
+        zpool_data = ['mirrorpool', 'raidz2', 'disk1', 'disk2']
         pool = provider.process_zpool_data(zpool_data)
         expect(pool[:raidz]).to eq(['disk1 disk2'])
         expect(pool[:raid_parity]).to eq('raidz2')
