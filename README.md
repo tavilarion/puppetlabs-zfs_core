@@ -21,14 +21,14 @@ that has zfs or zpool resources.
 
 ### Beginning with zfs_core
 
-To create a zpool resource with the name `tstpool` that uses the disk `/ztstpool/dsk`:
+To create a zpool resource with the name `tstpool` that uses the disk `/ztstpool/dsk`, use the following code:
 ```
 zpool { 'tstpool':
   ensure => present,
   disk => '/ztstpool/dsk',
 }
 ```
-To create a zfs resource based on the pool created above:
+To create a zfs resource based on the pool created above, use the following code:
 ```
 zfs { 'tstpool/tstfs':
   ensure => present,
@@ -47,7 +47,7 @@ This module is documented using Puppet Strings.
 
 For a quick primer on how Strings works, please see [this blog post](https://puppet.com/blog/using-puppet-strings-generate-great-documentation-puppet-modules) or the [README.md](https://github.com/puppetlabs/puppet-strings/blob/master/README.md) for Puppet Strings.
 
-To generate documentation locally, run
+To generate documentation locally, run the following command:
 ```
 bundle install
 bundle exec puppet strings generate ./lib/**/*.rb
