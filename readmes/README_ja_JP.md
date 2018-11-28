@@ -5,18 +5,21 @@
 
 1. [説明](#description)
 2. [セットアップ - zfs_core導入の基本](#setup)
-    * [zfs_coreモジュールの利用方法](#beginning-with-zfs_core)
+    * [zfs_coreモジュールの利用方法](#beginning-with-zfs)
 3. [使用 - 設定オプションと追加機能](#usage)
 4. [参考 - モジュールの機能と動作について](#reference)
 5. [制約 - OS互換性など](#limitations)
 6. [開発 - モジュール貢献についてのガイド](#development)
 
+<a id="description"></a>
 ## 説明
 
 zfs_coreモジュールは、zfsリソースおよびzpoolリソースの両方を管理するために使用します。このモジュールはSolarisマシンでしかテストされていませんが、zfsまたはzpoolリソースのあるすべてのマシンで機能するはずです。
 
+<a id="setup"></a>
 ## セットアップ
 
+<a id="beginning-with-zfs"></a>
 ### zfs_coreモジュールの利用方法
 
 ディスク`/ztstpool/dsk`を使用するzpoolリソースを`tstpool`という名前で作成するには、以下のコードを使用します。
@@ -33,10 +36,12 @@ zfs { 'tstpool/tstfs':
 }
 ```
 
+<a id="usage"></a>
 ## 使用
 
 利用方法の詳細については、[zfs puppetドキュメント](https://puppet.com/docs/puppet/latest/types/zfs.html)および[zpool puppetドキュメント](https://puppet.com/docs/puppet/latest/types/zpool.html)を参照してください。
 
+<a id="reference"></a>
 ## リファレンス
 
 リファレンス文書については、REFERENCE.mdを参照してください。
@@ -52,10 +57,12 @@ bundle exec puppet strings generate ./lib/**/*.rb
 ```
 このコマンドにより、閲覧可能な`\_index.html`ファイルが`doc`ディレクトリに作成されます。ここで利用可能なリファレンスはすべて、コードベースに埋め込まれたYARD形式のコメントから生成されます。このモジュールに関して何らかの開発をする場合は、影響を受ける文書も更新する必要があります。
 
+<a id="limitations"></a>
 ## 制約
 
 このモジュールは、zfsおよびzpoolの両方を使用できるプラットフォームでのみ使用可能です。
 
+<a id="development"></a>
 ## 開発
 
 Puppet ForgeのPuppet Labsモジュールは、オープンプロジェクトです。プロジェクトをさらに発展させるには、コミュニティへの貢献が不可欠です。Puppetが役立つ可能性のある膨大な数のプラットフォーム、無数のハードウェア、ソフトウェア、デプロイメント構成に我々がアクセスすることはできません。
