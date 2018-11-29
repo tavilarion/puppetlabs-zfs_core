@@ -9,12 +9,14 @@
 4. [Limitations - OS compatibility, etc.](#limitations)
 5. [Development - Guide for contributing to the module](#development)
 
+<a id="description"></a>
 ## Description
 
 The zfs_core module is used to manage both zfs and zpool resources. Though This
 module is only tested on Solaris machines, it should also work on any machine
 that has zfs or zpool resources.
 
+<a id="usage"></a>
 ## Usage
 
 To create a zpool resource with the name `tstpool` that uses the disk `/ztstpool/dsk`, use the following code:
@@ -31,9 +33,10 @@ zfs { 'tstpool/tstfs':
 }
 ```
 
+<a id="reference"></a>
 ## Reference
 
-Please see the reference documentation for [`zfs`](REFERENCE.md) and [`zpool`](https://github.com/puppetlabs/puppetlabs-zpool_core/blob/master/REFERENCE.md).
+Please see the REFERENCE.md documentation for the `zfs_core` and `zpool_core` modules.
 
 This module is documented using Puppet Strings.
 
@@ -46,10 +49,12 @@ bundle exec puppet strings generate ./lib/**/*.rb
 ```
 This command will create a browsable `\_index.html` file in the `doc` directory. The references available here are all generated from YARD-style comments embedded in the code base. When any development happens on this module, the impacted documentation should also be updated.
 
+<a id="limitations"></a>
 ## Limitations
 
 This module is only available on platforms that have both zfs and zpool available.
 
+<a id="development"></a>
 ## Development
 
 Puppet Labs modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. We can't access the huge number of platforms and myriad of hardware, software, and deployment configurations that Puppet is intended to serve.
