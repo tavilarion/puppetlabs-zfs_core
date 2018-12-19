@@ -4,23 +4,18 @@
 #### 目次
 
 1. [説明](#description)
-2. [セットアップ - zfs_core導入の基本](#setup)
-    * [zfs_coreモジュールの利用方法](#beginning-with-zfs)
-3. [使用 - 設定オプションと追加機能](#usage)
-4. [参考 - モジュールの機能と動作について](#reference)
-5. [制約 - OS互換性など](#limitations)
-6. [開発 - モジュール貢献についてのガイド](#development)
+2. [使用 - 設定オプションと追加機能](#usage)
+3. [参考 - モジュールの機能と動作について](#reference)
+4. [制約 - OS互換性など](#limitations)
+5. [開発 - モジュール貢献についてのガイド](#development)
 
 <a id="description"></a>
 ## 説明
 
 zfs_coreモジュールは、zfsリソースおよびzpoolリソースの両方を管理するために使用します。このモジュールはSolarisマシンでしかテストされていませんが、zfsまたはzpoolリソースのあるすべてのマシンで機能するはずです。
 
-<a id="setup"></a>
-## セットアップ
-
-<a id="beginning-with-zfs"></a>
-### zfs_coreモジュールの利用方法
+<a id="usage"></a>
+## 使用
 
 ディスク`/ztstpool/dsk`を使用するzpoolリソースを`tstpool`という名前で作成するには、以下のコードを使用します。
 ```
@@ -36,15 +31,10 @@ zfs { 'tstpool/tstfs':
 }
 ```
 
-<a id="usage"></a>
-## 使用
-
-利用方法の詳細については、[zfs puppetドキュメント](https://puppet.com/docs/puppet/latest/types/zfs.html)および[zpool puppetドキュメント](https://puppet.com/docs/puppet/latest/types/zpool.html)を参照してください。
-
 <a id="reference"></a>
 ## リファレンス
 
-リファレンス文書については、REFERENCE.mdを参照してください。
+`zfs_core`および`zpool_core`モジュールについては、REFERENCE.md文書を参照してください。
 
 このモジュールは、Puppet Stringsを用いて文書化されています。
 
